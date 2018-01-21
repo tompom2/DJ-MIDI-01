@@ -1,0 +1,127 @@
+/*
+Reliably receives MIDI from MIDI-OX, turns on and off LED and shows debug in Serial Monitor
+
+In MIDI-OX, I have changed the Low Level Output Buffers to size 64 and num 2.
+MIDI-OX doesn’t like VirtualDJ running in the background, and won’t load the Teensy until it’s closed.
+To send MIDI notes, I am using the Keyboard funciton in MIDI-OX 
+Select Teensy MIDI as MIDI Output in MIDI-OX
+*/
+
+#include <C:\Program Files (x86)\Arduino\hardware\teensy\avr\libraries\MIDI\MIDI.h>
+#include <midi_Defs.h>
+#include <midi_Message.h>
+#include <midi_Namespace.h>
+#include <midi_Settings.h>
+
+int blu = 4;
+//int grn = 5;
+//int red = 6;
+int FX1 = 10;
+
+
+const int FX1LEDnote = 61; //C#4, Ox3D
+
+int inNote; //incoming MIDI note
+int inVelocity; //incoming MIDI velocity
+int inChannel; //incoming MIDI channel
+
+
+void setup() {
+  // put your setup code here, to run once:
+pinMode(blu, OUTPUT);
+//pinMode(grn, OUTPUT);
+//pinMode(red, OUTPUT);
+
+digitalWrite(blu, HIGH);
+//digitalWrite(grn, HIGH);
+//digitalWrite(red, HIGH);
+
+usbMIDI.setHandleNoteOff(OnNoteOff);
+  usbMIDI.setHandleNoteOn(OnNoteOn) ;
+
+Serial.begin(9600); // Initialize the serial port
+//MIDI.begin(MIDI_CHANNEL_OMNI);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+   
+ usbMIDI.read();
+ 
+}
+
+void OnNoteOn(byte channel, byte note, byte velocity) {
+  blueOn(); // Any Note-On turns on LED
+  Serial.print("ON ");
+}
+
+void OnNoteOff(byte channel, byte note, byte velocity) {
+  blueOff();  // Any Note-Off turns off LED
+  Serial.print("OFF ");
+}
+
+////***LED Colours***
+//void redOn(){
+//  digitalWrite(red, LOW);
+//}
+//
+//void redOff(){
+//  digitalWrite(red, HIGH);
+//}
+void blueOn(){
+  digitalWrite(blu, LOW);
+}
+
+void blueOff(){
+  digitalWrite(blu, HIGH);
+}
+//
+//void greenOn(){
+//  digitalWrite(grn, LOW);
+//}
+//
+//void greenOff(){
+//  digitalWrite(grn, HIGH);
+//}
+//
+//void yellowOn(){
+//  digitalWrite(red, LOW);
+//  digitalWrite(grn, LOW);
+//}
+//
+//void yellowOff(){
+//  digitalWrite(red, HIGH);
+//  digitalWrite(grn, HIGH);
+//}
+//
+//void magentaOn(){
+//  digitalWrite(red, LOW);
+//  digitalWrite(blu, LOW);
+//}
+//
+//void magentaOff(){
+//  digitalWrite(red, HIGH);
+//  digitalWrite(blu, HIGH);
+//}
+//
+//void cyanOn(){
+//  digitalWrite(grn, LOW);
+//  digitalWrite(blu, LOW);
+//}
+//
+//void cyanOff(){
+//  digitalWrite(grn, HIGH);
+//  digitalWrite(blu, HIGH);
+//}
+//
+//void whiteOn(){
+//  digitalWrite(red, LOW);
+//  digitalWrite(grn, LOW);
+//  digitalWrite(blu, LOW);
+//}
+//
+//void whiteOff(){
+//  digitalWrite(red, HIGH);
+//  digitalWrite(grn, HIGH);
+//  digitalWrite(blu, HIGH);
+//}
